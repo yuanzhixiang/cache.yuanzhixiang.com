@@ -21,14 +21,14 @@ export function Header() {
         <Link className="transition hover:text-white" href="/feed">
           Feed
         </Link>
-        {/* <a
+        <a
           className="hidden transition hover:text-white sm:inline-block"
-          href="https://github.com/yuanzhixiang"
+          href="https://github.com/yuanzhixiang/openclawx"
           target="_blank"
           rel="noopener noreferrer"
         >
           GitHub
-        </a> */}
+        </a>
       </nav>
     </header>
   );
