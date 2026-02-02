@@ -1,0 +1,13 @@
+{
+  // 定义了一个制表符应该显示为多少个空格的宽度
+  "editor.tabSize": 2,
+  // 当你按 Tab 键时，实际插入空格字符而不是制表符字符
+  "editor.insertSpaces": true,
+  // 严格按照你设定的规则执行，不根据文件的缩进模式自动调整
+  "editor.detectIndentation": false,
+  // 保存时自动格式化
+  "editor.formatOnSave": true,
+  // 将默认的格式化工具设置为 prettier
+  // vscode 里面似乎会默认这样设置，但 antigravity 需要手动设置
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
+}

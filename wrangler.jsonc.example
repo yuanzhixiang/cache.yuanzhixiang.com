@@ -1,0 +1,52 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+  "name": "openclawx-ai",
+  "compatibility_date": "2024-12-30",
+  "compatibility_flags": [
+    // Enable Node.js API
+    // see https://developers.cloudflare.com/workers/configuration/compatibility-flags/#nodejs-compatibility-flag
+    "nodejs_compat",
+    // Allow to fetch URLs in your app
+    // see https://developers.cloudflare.com/workers/configuration/compatibility-flags/#global-fetch-strictly-public
+    "global_fetch_strictly_public",
+  ],
+  "observability": {
+    "enabled": true,
+  },
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS",
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      // The service should match the "name" of your worker
+      "service": "openclawx-ai",
+    },
+  ],
+  "r2_buckets": [
+    // Create a R2 binding with the binding name "NEXT_INC_CACHE_R2_BUCKET"
+    // Uncomment and configure for Next.js caching:
+    // {
+    //   "binding": "NEXT_INC_CACHE_R2_BUCKET",
+    //   "bucket_name": "<BUCKET_NAME>"
+    // }
+  ],
+  "routes": [
+    {
+      "pattern": "openclawx.ai",
+      "custom_domain": true,
+    },
+  ],
+  // Add this to your wrangler.jsonc
+  "hyperdrive": [
+    {
+      "binding": "HYPERDRIVE",
+      "id": "xxxxx",
+
+      // Optional. Can be used to connect to a local database for local development with `wrangler dev`
+      "localConnectionString": "postgresql://xxxxx",
+    },
+  ],
+}

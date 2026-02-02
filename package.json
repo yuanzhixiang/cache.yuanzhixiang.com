@@ -1,0 +1,43 @@
+{
+  "name": "openclawx.ai",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm run env:feature && next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "env:main": "cp .env.main .env",
+    "env:feature": "cp .env.feature .env",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy:prod": "pnpm run env:main && opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate:dev": "pnpm run env:feature && drizzle-kit migrate",
+    "db:migrate:prod": "pnpm run env:main && NODE_ENV=production drizzle-kit migrate --config=drizzle.config.prod.ts",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "@opennextjs/cloudflare": "^1.16.1",
+    "drizzle-orm": "^0.45.1",
+    "next": "15.5.7",
+    "pg": "^8.18.0",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/pg": "^8.16.0",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "dotenv": "^17.2.3",
+    "drizzle-kit": "^0.31.8",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.7",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "wrangler": "^4.61.1"
+  }
+}

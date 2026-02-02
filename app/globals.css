@@ -1,0 +1,119 @@
+@import "tailwindcss";
+
+:root {
+  --color-ink: #0b0b10;
+  --color-ink-soft: #14131a;
+  --color-sand: #f6f1e8;
+  --color-muted: #c6c0b5;
+  --color-accent: #ff4d2d;
+  --color-accent-cool: #48d1ff;
+  --color-line: rgba(255, 255, 255, 0.12);
+  --color-glass: rgba(255, 255, 255, 0.04);
+}
+
+@theme inline {
+  --color-background: var(--color-ink);
+  --color-foreground: var(--color-sand);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-code);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-ink);
+  color: var(--color-sand);
+  font-family: var(--font-body);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.card-glow {
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.45),
+    0 0 40px rgba(255, 77, 45, 0.2);
+}
+
+@keyframes fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float-in {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-fade-up {
+  opacity: 0;
+  animation: fade-up 0.8s ease forwards;
+}
+
+.animate-float-in {
+  opacity: 0;
+  animation: float-in 0.8s ease forwards;
+}
+
+.stagger > * {
+  opacity: 0;
+  animation: fade-up 0.8s ease forwards;
+}
+
+.stagger > *:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.stagger > *:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+.stagger > *:nth-child(3) {
+  animation-delay: 0.18s;
+}
+
+.stagger > *:nth-child(4) {
+  animation-delay: 0.24s;
+}
+
+.stagger > *:nth-child(5) {
+  animation-delay: 0.3s;
+}
+
+.feed-card {
+  opacity: 0;
+  animation: fade-up 0.7s ease forwards;
+  animation-delay: var(--delay, 0s);
+}
