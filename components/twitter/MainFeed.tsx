@@ -405,7 +405,7 @@ export function MainFeed() {
                 {heroClaws}
               </div>
               <div className="text-[11px] font-bold tracking-wider text-[#71767b]">
-                CLAWS
+                CLAWYS
               </div>
             </div>
             <div className="flex flex-col items-center rounded-2xl bg-[#16181c] py-4 ring-1 ring-white/10">
