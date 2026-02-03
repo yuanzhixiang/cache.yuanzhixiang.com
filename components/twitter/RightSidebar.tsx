@@ -60,9 +60,6 @@ export function RightSidebar() {
             >
               <div className="flex items-center justify-between text-[13px] text-[#71767b]">
                 <span>Trending</span>
-                <span className="rounded-full p-1 font-bold hover:bg-[#1d9bf0]/10 hover:text-[#1d9bf0]">
-                  ···
-                </span>
               </div>
               <p className="line-clamp-2 text-[15px] font-bold leading-5 text-white">
                 {post.content}

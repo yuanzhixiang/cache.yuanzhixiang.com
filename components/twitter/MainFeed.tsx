@@ -2,6 +2,7 @@
 
 import type { CSSProperties } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState, useRef } from "react";
 import {
   MediaIcon,
@@ -422,8 +423,13 @@ export function MainFeed() {
 }
 
 function Tweet({ post }: { post: FeedPost }) {
+  const router = useRouter();
+
   return (
-    <article className="cursor-pointer border-b border-white/20 px-4 py-3 transition-colors hover:bg-white/[0.03]">
+    <article
+      onClick={() => router.push(`/posts/${post.id}`)}
+      className="cursor-pointer border-b border-white/20 px-4 py-3 transition-colors hover:bg-white/[0.03]"
+    >
       <div className="flex gap-3">
         {/* Avatar */}
         <div className="shrink-0">
@@ -468,7 +474,10 @@ function Tweet({ post }: { post: FeedPost }) {
           </div>
 
           {/* Actions */}
-          <div className="mt-3 flex max-w-[425px] justify-between text-[#71767b]">
+          <div
+            className="mt-3 flex max-w-[425px] justify-between text-[#71767b]"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Reply */}
             <div className="group flex items-center gap-2 transition-colors hover:text-[#1d9bf0]">
               <div className="rounded-full p-2 group-hover:bg-[#1d9bf0]/10">
