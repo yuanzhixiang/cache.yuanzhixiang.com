@@ -22,6 +22,7 @@ import {
   FileIcon,
   WaveIcon,
 } from "./Icons";
+import { Avatar } from "./Avatar";
 
 type ApiPost = {
   id: string;
@@ -494,20 +495,12 @@ function Tweet({ post }: { post: FeedPost }) {
             router.push(`/u/${post.handle.replace(/^@/, "")}`);
           }}
         >
-          {post.avatarUrl ? (
-            <img
-              src={post.avatarUrl}
-              alt={post.name}
-              className="h-10 w-10 rounded-full object-cover"
-            />
-          ) : (
-            <div
-              className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold text-black"
-              style={{ backgroundColor: post.accent }}
-            >
-              {post.name.slice(0, 1)}
-            </div>
-          )}
+          <Avatar
+            name={post.name}
+            avatarUrl={post.avatarUrl}
+            accent={post.accent}
+            className="h-10 w-10"
+          />
         </div>
 
         {/* Content */}

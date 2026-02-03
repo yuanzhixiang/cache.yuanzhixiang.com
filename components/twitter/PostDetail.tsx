@@ -10,6 +10,7 @@ import {
   ShareIcon,
   MoreIcon,
 } from "./Icons";
+import { Avatar } from "./Avatar";
 import { useState } from "react";
 
 type DetailPost = {
@@ -100,20 +101,12 @@ export function PostDetail({
               router.push(`/u/${post.handle.replace(/^@/, "")}`);
             }}
           >
-            {post.avatarUrl ? (
-              <img
-                src={post.avatarUrl}
-                alt={post.name}
-                className="h-10 w-10 rounded-full object-cover"
-              />
-            ) : (
-              <div
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold text-black"
-                style={{ backgroundColor: post.accent }}
-              >
-                {post.name.slice(0, 1)}
-              </div>
-            )}
+            <Avatar
+              name={post.name}
+              avatarUrl={post.avatarUrl}
+              accent={post.accent}
+              className="h-10 w-10 shrink-0"
+            />
             <div className="flex flex-col">
               <div className="flex items-center gap-1 font-bold text-white">
                 {post.name}
@@ -166,20 +159,12 @@ export function PostDetail({
             >
               {/* Simplified Reply View */}
               <div className="flex gap-3">
-                {reply.avatarUrl ? (
-                  <img
-                    src={reply.avatarUrl}
-                    alt={reply.name}
-                    className="h-10 w-10 rounded-full object-cover"
-                  />
-                ) : (
-                  <div
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold text-black"
-                    style={{ backgroundColor: reply.accent }}
-                  >
-                    {reply.name.slice(0, 1)}
-                  </div>
-                )}
+                <Avatar
+                  name={reply.name}
+                  avatarUrl={reply.avatarUrl}
+                  accent={reply.accent}
+                  className="h-10 w-10 shrink-0"
+                />
                 <div className="flex flex-col">
                   <div className="flex items-center gap-1 text-[15px] text-[#71767b]">
                     <span className="font-bold text-white">{reply.name}</span>

@@ -12,6 +12,7 @@ import {
   MailIcon,
   LocationIcon,
 } from "./Icons";
+import { Avatar } from "./Avatar";
 
 // Calendar icon for joined date
 const CalendarIcon = ({ className }: { className?: string }) => (
@@ -186,20 +187,13 @@ export function UserProfile({
           <div className="flex justify-between items-end -mt-[75px] mb-3">
             {/* Avatar */}
             <div className="relative rounded-full border-4 border-black bg-black">
-              {user.avatarUrl ? (
-                <img
-                  src={user.avatarUrl}
-                  alt={user.name}
-                  className="h-[134px] w-[134px] rounded-full object-cover"
-                />
-              ) : (
-                <div
-                  className="flex h-[134px] w-[134px] items-center justify-center rounded-full text-5xl font-bold text-black"
-                  style={{ backgroundColor: user.accent }}
-                >
-                  {user.name.slice(0, 1)}
-                </div>
-              )}
+              <Avatar
+                name={user.name}
+                avatarUrl={user.avatarUrl}
+                accent={user.accent}
+                className="h-[134px] w-[134px]"
+                textClassName="text-5xl"
+              />
             </div>
           </div>
 
@@ -292,20 +286,12 @@ export function UserProfile({
             </div>
             {/* Reuse Post rendering logic largely, but simplified here for compactness */}
             <div className="flex gap-3">
-              {user.avatarUrl ? (
-                <img
-                  src={user.avatarUrl}
-                  alt={user.name}
-                  className="h-10 w-10 min-w-[2.5rem] rounded-full object-cover"
-                />
-              ) : (
-                <div
-                  className="flex h-10 w-10 min-w-[2.5rem] items-center justify-center rounded-full text-sm font-bold text-black"
-                  style={{ backgroundColor: user.accent }}
-                >
-                  {user.name.slice(0, 1)}
-                </div>
-              )}
+              <Avatar
+                name={user.name}
+                avatarUrl={user.avatarUrl}
+                accent={user.accent}
+                className="h-10 w-10 min-w-[2.5rem]"
+              />
               <div className="flex flex-col w-full">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1 text-[15px] text-[#71767b]">
@@ -380,20 +366,12 @@ export function UserProfile({
             onClick={() => router.push(`/posts/${post.id}`)}
           >
             <div className="flex gap-3">
-              {user.avatarUrl ? (
-                <img
-                  src={user.avatarUrl}
-                  alt={user.name}
-                  className="h-10 w-10 min-w-[2.5rem] rounded-full object-cover"
+                <Avatar
+                  name={user.name}
+                  avatarUrl={user.avatarUrl}
+                  accent={user.accent}
+                  className="h-10 w-10 min-w-[2.5rem]"
                 />
-              ) : (
-                <div
-                  className="flex h-10 w-10 min-w-[2.5rem] items-center justify-center rounded-full text-sm font-bold text-black"
-                  style={{ backgroundColor: user.accent }}
-                >
-                  {user.name.slice(0, 1)}
-                </div>
-              )}
               <div className="flex flex-col w-full">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1 text-[15px] text-[#71767b]">

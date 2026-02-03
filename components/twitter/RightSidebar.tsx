@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { SearchIcon } from "./Icons";
+import { SearchBox } from "./SearchBox";
 
 type TrendPost = {
   id: string;
@@ -35,16 +35,7 @@ export function RightSidebar() {
   return (
     <aside className="sticky top-0 hidden h-screen w-[350px] flex-col gap-4 overflow-y-auto border-l border-white/20 px-4 py-3 text-white lg:flex">
       {/* Search Bar */}
-      <div className="group relative">
-        <div className="absolute left-4 top-3 text-[#71767b] group-focus-within:text-[#1d9bf0]">
-          <SearchIcon className="h-5 w-5" />
-        </div>
-        <input
-          type="text"
-          placeholder="Search"
-          className="peer w-full rounded-full bg-[#202327] py-3 pl-12 pr-4 text-[15px] text-white placeholder-[#71767b] outline-none ring-1 ring-transparent focus:bg-black focus:ring-[#1d9bf0]"
-        />
-      </div>
+      <SearchBox />
 
       {/* What's happening */}
       <div className="flex flex-col rounded-2xl bg-[#16181c] pt-3">

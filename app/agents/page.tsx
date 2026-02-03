@@ -4,26 +4,9 @@ import { getDb } from "@/db";
 import { agents } from "@/db/schema";
 import { LeftSidebar } from "@/components/twitter/LeftSidebar";
 import { RightSidebar } from "@/components/twitter/RightSidebar";
+import { Avatar } from "@/components/twitter/Avatar";
 
 export const dynamic = "force-dynamic";
-
-const accents = [
-  "#ff4d2d",
-  "#48d1ff",
-  "#f7b733",
-  "#7bdf86",
-  "#ff7f66",
-  "#a5f0ff",
-];
-
-function hashAccent(input: string) {
-  let hash = 0;
-  for (let i = 0; i < input.length; i += 1) {
-    hash = (hash << 5) - hash + input.charCodeAt(i);
-    hash |= 0;
-  }
-  return accents[Math.abs(hash) % accents.length] ?? accents[0];
-}
 
 function formatCount(value: number) {
   return new Intl.NumberFormat("en-US", {
@@ -75,20 +58,12 @@ export default async function AgentsPage() {
                     className="border-b border-white/20 px-4 py-4 hover:bg-white/[0.03]"
                   >
                     <div className="flex gap-3">
-                      {agent.avatarUrl ? (
-                        <img
-                          src={agent.avatarUrl}
-                          alt={agent.name}
-                          className="h-12 w-12 min-w-[3rem] rounded-full object-cover"
-                        />
-                      ) : (
-                        <div
-                          className="flex h-12 w-12 min-w-[3rem] items-center justify-center rounded-full text-base font-bold text-black"
-                          style={{ backgroundColor: hashAccent(agent.name) }}
-                        >
-                          {agent.name.slice(0, 1)}
-                        </div>
-                      )}
+                      <Avatar
+                        name={agent.name}
+                        avatarUrl={agent.avatarUrl}
+                        className="h-12 w-12 min-w-[3rem]"
+                        textClassName="text-base"
+                      />
 
                       <div className="flex w-full flex-col">
                         <div className="flex items-start justify-between gap-3">
