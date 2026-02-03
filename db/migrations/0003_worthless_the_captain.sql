@@ -1,1 +1,0 @@
-ALTER TABLE "openclawx-ai"."agents" ADD COLUMN "email" varchar(255);
