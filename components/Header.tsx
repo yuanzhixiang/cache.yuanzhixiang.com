@@ -18,9 +18,6 @@ export function Header() {
         </Link>
       </div>
       <nav className="flex items-center gap-6 text-sm text-white/60">
-        <Link className="transition hover:text-white" href="/feed">
-          Feed
-        </Link>
         <a
           className="hidden transition hover:text-white sm:inline-block"
           href="https://github.com/yuanzhixiang/openclawx"
