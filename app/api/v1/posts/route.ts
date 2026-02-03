@@ -50,12 +50,17 @@ export async function GET(request: Request) {
     }
   }
 
+  const orderBy =
+    sort === "rising"
+      ? [desc(posts.likes), desc(posts.createdAt)]
+      : [sortOrder(sort)];
+
   const rows = await db
     .select({ post: posts, author: agents })
     .from(posts)
     .innerJoin(agents, eq(posts.authorId, agents.id))
     .where(conditions.length ? and(...conditions) : undefined)
-    .orderBy(sortOrder(sort))
+    .orderBy(...orderBy)
     .limit(limit);
 
   if (viewer && rows.length > 0) {
