@@ -201,19 +201,6 @@ export function UserProfile({
                 </div>
               )}
             </div>
-
-            {/* Action Buttons */}
-            <div className="flex gap-2 pb-2">
-              <button className="rounded-full border border-[#536471] p-2 hover:bg-white/10 transition-colors">
-                <MoreIcon className="h-5 w-5 text-white" />
-              </button>
-              <button className="rounded-full border border-[#536471] p-2 hover:bg-white/10 transition-colors">
-                <MailIcon className="h-5 w-5 text-white" />
-              </button>
-              <button className="rounded-full bg-white px-5 py-1.5 text-[15px] font-bold text-black hover:bg-[#d7dbdc] transition-colors">
-                Follow
-              </button>
-            </div>
           </div>
 
           {/* User Details */}
@@ -221,16 +208,6 @@ export function UserProfile({
             <div className="flex flex-col">
               <div className="flex items-center gap-1 text-[20px] font-extrabold leading-6 text-white">
                 {user.name}
-                {/* Verified Badge */}
-                <svg
-                  viewBox="0 0 24 24"
-                  aria-label="Verified account"
-                  className="h-[20px] w-[20px] fill-[#f9bc06]"
-                >
-                  <g>
-                    <path d="M22.25 12c0-1.43-.88-2.67-2.19-3.34.46-1.39.2-2.9-.81-3.91s-2.52-1.27-3.91-.81c-.66-1.31-1.91-2.19-3.34-2.19s-2.67.88-3.33 2.19c-1.4-.46-2.91-.2-3.92.81s-1.26 2.52-.8 3.91c-1.31.67-2.2 1.91-2.2 3.34s.89 2.67 2.2 3.34c-.46 1.39-.21 2.9.8 3.91s2.52 1.27 3.91.81c.67 1.31 1.92 2.19 3.35 2.19s2.68-.88 3.34-2.19c1.39.46 2.9.2 3.91-.81s1.27-2.52.81-3.91c1.31-.67 2.19-1.91 2.19-3.34zm-11.71 4.2L6.8 12.46l1.41-1.42 2.26 2.26 4.8-5.23 1.47 1.36-6.2 6.77z"></path>
-                  </g>
-                </svg>
               </div>
               <div className="text-[15px] text-[#71767b]">{user.handle}</div>
             </div>
@@ -242,12 +219,6 @@ export function UserProfile({
 
             {/* Metadata Row */}
             <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[15px] text-[#71767b]">
-              {user.location && (
-                <div className="flex items-center gap-1">
-                  <LocationIcon className="h-[18px] w-[18px]" />
-                  <span>{user.location}</span>
-                </div>
-              )}
               {user.website && (
                 <div className="flex items-center gap-1">
                   <LinkIcon className="h-[18px] w-[18px]" />
@@ -350,7 +321,9 @@ export function UserProfile({
                     </svg>
                     <span>{user.handle}</span>
                     <span>·</span>
-                    <span>{formatRelativeTime(activePinnedPost.createdAt)}</span>
+                    <span>
+                      {formatRelativeTime(activePinnedPost.createdAt)}
+                    </span>
                   </div>
                   <MoreIcon className="h-5 w-5 text-[#71767b]" />
                 </div>
@@ -401,85 +374,85 @@ export function UserProfile({
 
         {/* Other Posts */}
         {visiblePosts.map((post) => (
-            <div
-              key={post.id}
-              className="border-b border-white/20 px-4 py-3 hover:bg-white/[0.03] cursor-pointer"
-              onClick={() => router.push(`/posts/${post.id}`)}
-            >
-              <div className="flex gap-3">
-                {user.avatarUrl ? (
-                  <img
-                    src={user.avatarUrl}
-                    alt={user.name}
-                    className="h-10 w-10 min-w-[2.5rem] rounded-full object-cover"
-                  />
-                ) : (
-                  <div
-                    className="flex h-10 w-10 min-w-[2.5rem] items-center justify-center rounded-full text-sm font-bold text-black"
-                    style={{ backgroundColor: user.accent }}
-                  >
-                    {user.name.slice(0, 1)}
+          <div
+            key={post.id}
+            className="border-b border-white/20 px-4 py-3 hover:bg-white/[0.03] cursor-pointer"
+            onClick={() => router.push(`/posts/${post.id}`)}
+          >
+            <div className="flex gap-3">
+              {user.avatarUrl ? (
+                <img
+                  src={user.avatarUrl}
+                  alt={user.name}
+                  className="h-10 w-10 min-w-[2.5rem] rounded-full object-cover"
+                />
+              ) : (
+                <div
+                  className="flex h-10 w-10 min-w-[2.5rem] items-center justify-center rounded-full text-sm font-bold text-black"
+                  style={{ backgroundColor: user.accent }}
+                >
+                  {user.name.slice(0, 1)}
+                </div>
+              )}
+              <div className="flex flex-col w-full">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1 text-[15px] text-[#71767b]">
+                    <span className="font-bold text-white">{user.name}</span>
+                    <svg
+                      viewBox="0 0 24 24"
+                      aria-label="Verified account"
+                      className="h-[16px] w-[16px] fill-[#f9bc06]"
+                    >
+                      <g>
+                        <path d="M22.25 12c0-1.43-.88-2.67-2.19-3.34.46-1.39.2-2.9-.81-3.91s-2.52-1.27-3.91-.81c-.66-1.31-1.91-2.19-3.34-2.19s-2.67.88-3.33 2.19c-1.4-.46-2.91-.2-3.92.81s-1.26 2.52-.8 3.91c-1.31.67-2.2 1.91-2.2 3.34s.89 2.67 2.2 3.34c-.46 1.39-.21 2.9.8 3.91s2.52 1.27 3.91.81c.67 1.31 1.92 2.19 3.35 2.19s2.68-.88 3.34-2.19c1.39.46 2.9.2 3.91-.81s1.27-2.52.81-3.91c1.31-.67 2.19-1.91 2.19-3.34zm-11.71 4.2L6.8 12.46l1.41-1.42 2.26 2.26 4.8-5.23 1.47 1.36-6.2 6.77z"></path>
+                      </g>
+                    </svg>
+                    <span>{user.handle}</span>
+                    <span>·</span>
+                    <span>{formatRelativeTime(post.createdAt)}</span>
                   </div>
-                )}
-                <div className="flex flex-col w-full">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1 text-[15px] text-[#71767b]">
-                      <span className="font-bold text-white">{user.name}</span>
-                      <svg
-                        viewBox="0 0 24 24"
-                        aria-label="Verified account"
-                        className="h-[16px] w-[16px] fill-[#f9bc06]"
-                      >
-                        <g>
-                          <path d="M22.25 12c0-1.43-.88-2.67-2.19-3.34.46-1.39.2-2.9-.81-3.91s-2.52-1.27-3.91-.81c-.66-1.31-1.91-2.19-3.34-2.19s-2.67.88-3.33 2.19c-1.4-.46-2.91-.2-3.92.81s-1.26 2.52-.8 3.91c-1.31.67-2.2 1.91-2.2 3.34s.89 2.67 2.2 3.34c-.46 1.39-.21 2.9.8 3.91s2.52 1.27 3.91.81c.67 1.31 1.92 2.19 3.35 2.19s2.68-.88 3.34-2.19c1.39.46 2.9.2 3.91-.81s1.27-2.52.81-3.91c1.31-.67 2.19-1.91 2.19-3.34zm-11.71 4.2L6.8 12.46l1.41-1.42 2.26 2.26 4.8-5.23 1.47 1.36-6.2 6.77z"></path>
-                        </g>
-                      </svg>
-                      <span>{user.handle}</span>
-                      <span>·</span>
-                      <span>{formatRelativeTime(post.createdAt)}</span>
+                  <MoreIcon className="h-5 w-5 text-[#71767b]" />
+                </div>
+                <div className="text-[15px] leading-5 text-white whitespace-pre-wrap mt-1">
+                  {post.content}
+                </div>
+                {/* Actions */}
+                <div
+                  className="mt-2 flex max-w-[425px] justify-between text-[#71767b]"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button className="group flex items-center gap-1.5 hover:text-[#1d9bf0]">
+                    <div className="p-2 rounded-full group-hover:bg-[#1d9bf0]/10">
+                      <ReplyIcon className="h-4 w-4" />
+                    </div>{" "}
+                    <span className="text-[13px]">{post.replies || ""}</span>
+                  </button>
+                  <button className="group flex items-center gap-1.5 hover:text-[#00ba7c]">
+                    <div className="p-2 rounded-full group-hover:bg-[#00ba7c]/10">
+                      <RepostIcon className="h-4 w-4" />
                     </div>
-                    <MoreIcon className="h-5 w-5 text-[#71767b]" />
-                  </div>
-                  <div className="text-[15px] leading-5 text-white whitespace-pre-wrap mt-1">
-                    {post.content}
-                  </div>
-                  {/* Actions */}
-                  <div
-                    className="mt-2 flex max-w-[425px] justify-between text-[#71767b]"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <button className="group flex items-center gap-1.5 hover:text-[#1d9bf0]">
-                      <div className="p-2 rounded-full group-hover:bg-[#1d9bf0]/10">
-                        <ReplyIcon className="h-4 w-4" />
-                      </div>{" "}
-                      <span className="text-[13px]">{post.replies || ""}</span>
-                    </button>
-                    <button className="group flex items-center gap-1.5 hover:text-[#00ba7c]">
-                      <div className="p-2 rounded-full group-hover:bg-[#00ba7c]/10">
-                        <RepostIcon className="h-4 w-4" />
-                      </div>
-                    </button>
-                    <button className="group flex items-center gap-1.5 hover:text-[#f91880]">
-                      <div className="p-2 rounded-full group-hover:bg-[#f91880]/10">
-                        <LikeIcon className="h-4 w-4" />
-                      </div>{" "}
-                      <span className="text-[13px]">{post.likes || ""}</span>
-                    </button>
-                    <button className="group flex items-center gap-1.5 hover:text-[#1d9bf0]">
-                      <div className="p-2 rounded-full group-hover:bg-[#1d9bf0]/10">
-                        <ViewIcon className="h-4 w-4" />
-                      </div>
-                    </button>
-                    <button className="group flex items-center gap-1.5 hover:text-[#1d9bf0]">
-                      <div className="p-2 rounded-full group-hover:bg-[#1d9bf0]/10">
-                        <ShareIcon className="h-4 w-4" />
-                      </div>
-                    </button>
-                  </div>
+                  </button>
+                  <button className="group flex items-center gap-1.5 hover:text-[#f91880]">
+                    <div className="p-2 rounded-full group-hover:bg-[#f91880]/10">
+                      <LikeIcon className="h-4 w-4" />
+                    </div>{" "}
+                    <span className="text-[13px]">{post.likes || ""}</span>
+                  </button>
+                  <button className="group flex items-center gap-1.5 hover:text-[#1d9bf0]">
+                    <div className="p-2 rounded-full group-hover:bg-[#1d9bf0]/10">
+                      <ViewIcon className="h-4 w-4" />
+                    </div>
+                  </button>
+                  <button className="group flex items-center gap-1.5 hover:text-[#1d9bf0]">
+                    <div className="p-2 rounded-full group-hover:bg-[#1d9bf0]/10">
+                      <ShareIcon className="h-4 w-4" />
+                    </div>
+                  </button>
                 </div>
               </div>
             </div>
-          ))}
+          </div>
+        ))}
       </div>
     </div>
   );
