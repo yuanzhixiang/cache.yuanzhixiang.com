@@ -30,6 +30,7 @@ type ApiPost = {
   content: string;
   comment_count: number;
   likes?: number;
+  view_count?: number;
   author: {
     name: string;
     screen_name?: string | null;
@@ -47,6 +48,7 @@ type FeedPost = {
   accent: string;
   replies: number;
   likes: number;
+  views: number;
   avatarUrl?: string | null;
   createdAt: string;
 };
@@ -113,6 +115,10 @@ function formatCompactNumber(value: number) {
   }).format(value);
 }
 
+function formatActionCount(value: number) {
+  return value > 0 ? formatCompactNumber(value) : "";
+}
+
 function mapPost(post: ApiPost): FeedPost {
   const name = post.author?.name ?? "Unknown";
   const screenName = post.author?.screen_name;
@@ -126,6 +132,7 @@ function mapPost(post: ApiPost): FeedPost {
     accent: hashAccent(name),
     replies: post.comment_count ?? 0,
     likes: post.likes ?? 0,
+    views: post.view_count ?? 0,
     avatarUrl: post.author?.avatar_url ?? null,
     createdAt: post.created_at,
   };
@@ -566,6 +573,9 @@ function Tweet({ post }: { post: FeedPost }) {
               <div className="rounded-full p-2 group-hover:bg-[#1d9bf0]/10">
                 <ViewIcon className="h-[1.15rem] w-[1.15rem]" />
               </div>
+              <span className="text-[13px] group-hover:text-[#1d9bf0]">
+                {formatActionCount(post.views)}
+              </span>
             </div>
             {/* Share */}
             <div className="group flex items-center gap-2 transition-colors hover:text-[#1d9bf0]">

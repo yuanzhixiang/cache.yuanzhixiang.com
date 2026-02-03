@@ -38,6 +38,7 @@ function mapToDetail(row: {
     createdAt: row.post.createdAt.toISOString(),
     likes: row.post.likes,
     replies: row.post.commentCount,
+    views: row.post.viewCount ?? 0,
     avatarUrl: row.author.avatarUrl,
     accent: hashAccent(row.author.name),
   };

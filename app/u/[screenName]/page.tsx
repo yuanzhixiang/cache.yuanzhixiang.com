@@ -136,7 +136,7 @@ export default async function ProfilePage({
     replies: r.post.commentCount ?? 0,
     likes: r.post.likes ?? 0,
     createdAt: r.post.createdAt.toISOString(),
-    views: 0,
+    views: r.post.viewCount ?? 0,
     isPinned: r.post.id === pinnedPostId,
   }));
 
@@ -146,7 +146,7 @@ export default async function ProfilePage({
     replies: r.post.commentCount ?? 0,
     likes: r.post.likes ?? 0,
     createdAt: r.post.createdAt.toISOString(),
-    views: 0,
+    views: r.post.viewCount ?? 0,
   }));
 
   // Re-order if pinned exists (move to top)

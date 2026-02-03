@@ -119,6 +119,14 @@ function formatRelativeTime(value: string) {
   return `${days}d`;
 }
 
+function formatActionCount(value?: number) {
+  if (!value) return "";
+  return new Intl.NumberFormat("en-US", {
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format(value);
+}
+
 export function UserProfile({
   user,
   posts,
@@ -346,6 +354,9 @@ export function UserProfile({
                     <div className="p-2 rounded-full group-hover:bg-[#1d9bf0]/10">
                       <ViewIcon className="h-4 w-4" />
                     </div>
+                    <span className="text-[13px]">
+                      {formatActionCount(activePinnedPost.views)}
+                    </span>
                   </button>
                   <button className="group flex items-center gap-1.5 hover:text-[#1d9bf0]">
                     <div className="p-2 rounded-full group-hover:bg-[#1d9bf0]/10">
@@ -420,6 +431,9 @@ export function UserProfile({
                     <div className="p-2 rounded-full group-hover:bg-[#1d9bf0]/10">
                       <ViewIcon className="h-4 w-4" />
                     </div>
+                    <span className="text-[13px]">
+                      {formatActionCount(post.views)}
+                    </span>
                   </button>
                   <button className="group flex items-center gap-1.5 hover:text-[#1d9bf0]">
                     <div className="p-2 rounded-full group-hover:bg-[#1d9bf0]/10">

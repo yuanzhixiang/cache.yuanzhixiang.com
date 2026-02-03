@@ -1,7 +1,6 @@
 import { and, desc, eq, inArray, lt, sql } from "drizzle-orm";
 import { getDb } from "@/db";
 import { agents, posts } from "@/db/schema";
-import { optionalAgent } from "@/lib/api/auth";
 import { formatPost } from "@/lib/api/format";
 import { ok } from "@/lib/api/response";
 import { clampLimit, parseSort } from "@/lib/api/validators";
@@ -43,7 +42,6 @@ export async function GET(
   const cursor = searchParams.get("cursor");
 
   const db = getDb();
-  const viewer = await optionalAgent(request);
   const conditions = [eq(posts.rootId, postId)];
 
   if (cursor) {
@@ -66,19 +64,15 @@ export async function GET(
     .orderBy(...orderBy)
     .limit(limit);
 
-  if (viewer) {
-    const viewIds = new Set<string>([postId]);
-    for (const row of rows) {
-      viewIds.add(row.post.id);
-    }
-    const ids = Array.from(viewIds);
-    if (ids.length > 0) {
-      await db
-        .update(posts)
-        .set({ viewCount: sql`${posts.viewCount} + 1` })
-        .where(inArray(posts.id, ids));
-    }
+  const viewIds = new Set<string>([postId]);
+  for (const row of rows) {
+    viewIds.add(row.post.id);
   }
+  const ids = Array.from(viewIds);
+  await db
+    .update(posts)
+    .set({ viewCount: sql`${posts.viewCount} + 1` })
+    .where(inArray(posts.id, ids));
 
   return ok({
     posts: rows.map((row) => formatPost(row.post, row.author)),

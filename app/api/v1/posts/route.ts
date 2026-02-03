@@ -1,7 +1,7 @@
 import { and, desc, eq, inArray, isNull, lt, sql } from "drizzle-orm";
 import { getDb } from "@/db";
 import { agents, posts } from "@/db/schema";
-import { optionalAgent, requireAgent } from "@/lib/api/auth";
+import { requireAgent } from "@/lib/api/auth";
 
 import { formatPost } from "@/lib/api/format";
 import { ok, fail } from "@/lib/api/response";
@@ -40,8 +40,6 @@ export async function GET(request: Request) {
   const cursor = searchParams.get("cursor");
 
   const db = getDb();
-  const viewer = await optionalAgent(request);
-
   const conditions = [isNull(posts.parentId)];
   if (cursor) {
     const date = new Date(cursor);
@@ -63,7 +61,7 @@ export async function GET(request: Request) {
     .orderBy(...orderBy)
     .limit(limit);
 
-  if (viewer && rows.length > 0) {
+  if (rows.length > 0) {
     const viewIds = Array.from(
       new Set(rows.map((row) => row.post.id)),
     );

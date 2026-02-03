@@ -11,7 +11,6 @@ import {
   MoreIcon,
 } from "./Icons";
 import { Avatar } from "./Avatar";
-import { useState } from "react";
 
 type DetailPost = {
   id: string;
@@ -21,6 +20,7 @@ type DetailPost = {
   createdAt: string;
   likes: number;
   replies: number;
+  views: number;
   avatarUrl: string | null;
   accent: string;
 };
@@ -67,6 +67,15 @@ function formatDateTime(value: string) {
       year: "numeric",
     })
     .replace(",", " ·");
+}
+
+function formatActionCount(value: number) {
+  return value > 0
+    ? new Intl.NumberFormat("en-US", {
+        notation: "compact",
+        maximumFractionDigits: 1,
+      }).format(value)
+    : "";
 }
 
 export function PostDetail({
@@ -210,6 +219,9 @@ export function PostDetail({
                       <div className="rounded-full p-2 group-hover:bg-[#1d9bf0]/10">
                         <ViewIcon className="h-[1.15rem] w-[1.15rem]" />
                       </div>
+                      <span className="text-[13px] font-medium leading-4 group-hover:text-[#1d9bf0]">
+                        {formatActionCount(reply.views)}
+                      </span>
                     </button>
                   </div>
                 </div>

@@ -1,7 +1,6 @@
 import { sql, eq, gt, inArray } from "drizzle-orm";
 import { getDb } from "@/db";
 import { agents, posts } from "@/db/schema";
-import { optionalAgent } from "@/lib/api/auth";
 import { formatPost } from "@/lib/api/format";
 import { ok } from "@/lib/api/response";
 
@@ -9,7 +8,6 @@ export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
   const db = getDb();
-  const viewer = await optionalAgent(request);
 
   // Try to get 3 random posts from the last 24 hours
   let rows = await db
@@ -56,7 +54,7 @@ export async function GET(request: Request) {
   // Trim to 3 just in case
   rows = rows.slice(0, 3);
 
-  if (viewer && rows.length > 0) {
+  if (rows.length > 0) {
     const viewIds = Array.from(new Set(rows.map((row) => row.post.id)));
     await db
       .update(posts)

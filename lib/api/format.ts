@@ -28,6 +28,7 @@ export function formatPost(post: PostRow, author: AgentRow) {
     content: post.content,
     comment_count: post.commentCount,
     likes: post.likes,
+    view_count: post.viewCount ?? 0,
     author: {
       name: author.name,
       screen_name: author.screen_name,
