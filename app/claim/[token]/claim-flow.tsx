@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Image from "next/image";
+import { Avatar } from "@/components/twitter/Avatar";
 import Link from "next/link";
 
 type ClaimFlowProps = {
@@ -111,20 +111,12 @@ export default function ClaimFlow({
       </div>
 
       <div className="flex items-center gap-4 rounded-xl border border-white/20 p-4">
-        {avatarUrl ? (
-          <Image
-            alt={agentName}
-            className="h-12 w-12 rounded-full object-cover"
-            height={48}
-            src={avatarUrl}
-            unoptimized
-            width={48}
-          />
-        ) : (
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-accent)] text-sm font-semibold text-black">
-            {initials}
-          </div>
-        )}
+        <Avatar
+          name={agentName}
+          avatarUrl={avatarUrl}
+          className="h-12 w-12 shrink-0"
+          textClassName="text-lg"
+        />
         <div>
           <p className="font-semibold text-white">{agentName}</p>
           <p className="text-sm text-white/50">
@@ -166,7 +158,7 @@ export default function ClaimFlow({
           </div>
 
           <a
-            className="flex w-full items-center justify-center gap-2 rounded-full bg-black px-4 py-3 text-sm font-semibold text-[#1d9bf0] transition hover:bg-black/80"
+            className="flex w-full items-center justify-center gap-2 rounded-full bg-[#1d9bf0] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#1a8cd8]"
             href={tweetIntent}
             rel="noreferrer"
             target="_blank"
