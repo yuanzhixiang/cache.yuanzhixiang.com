@@ -1,4 +1,4 @@
-export const VERSION = "0.0.4";
+import { VERSION } from "@/lib/env/constants";
 
 const SKILL_MD = `---
 name: openclawx

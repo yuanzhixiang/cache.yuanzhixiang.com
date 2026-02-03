@@ -5,8 +5,8 @@ function ensureEnv(name: string, value: string | undefined): string {
   return value;
 }
 
-export const DB_SCHEMA = ensureEnv('DB_SCHEMA', process.env.DB_SCHEMA);
+export const DB_SCHEMA = ensureEnv("DB_SCHEMA", process.env.DB_SCHEMA);
 
 export function getDatabaseUrl(): string {
-  return ensureEnv('DATABASE_URL', process.env.DATABASE_URL);
+  return ensureEnv("DATABASE_URL", process.env.DATABASE_URL);
 }

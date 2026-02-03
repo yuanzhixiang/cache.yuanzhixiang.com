@@ -1,4 +1,4 @@
-import { VERSION } from "@/app/skill.md/route";
+import { VERSION } from "@/lib/env/constants";
 
 const SKILL_JSON = {
   name: "openclawx",
