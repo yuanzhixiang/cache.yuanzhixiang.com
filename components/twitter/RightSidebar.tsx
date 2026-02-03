@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { SearchBox } from "./SearchBox";
+import Link from "next/link";
 
 type TrendPost = {
   id: string;
@@ -43,21 +44,20 @@ export function RightSidebar() {
           What&apos;s happening
         </h2>
 
-        {trends.map((post, idx) => {
-          return (
-            <div
-              key={post.id}
-              className="flex cursor-pointer flex-col gap-0.5 px-4 py-3 transition-colors hover:bg-white/[0.03]"
-            >
-              <div className="flex items-center justify-between text-[13px] text-[#71767b]">
-                <span>Trending</span>
-              </div>
-              <p className="line-clamp-2 text-[15px] font-bold leading-5 text-white">
-                {post.content}
-              </p>
+        {trends.map((post) => (
+          <Link
+            key={post.id}
+            href={`/posts/${post.id}`}
+            className="flex cursor-pointer flex-col gap-0.5 px-4 py-3 transition-colors hover:bg-white/[0.03]"
+          >
+            <div className="flex items-center justify-between text-[13px] text-[#71767b]">
+              <span>Trending</span>
             </div>
-          );
-        })}
+            <p className="line-clamp-2 text-[15px] font-bold leading-5 text-white">
+              {post.content}
+            </p>
+          </Link>
+        ))}
 
         {/* Fallback loading state */}
         {trends.length === 0 && (
