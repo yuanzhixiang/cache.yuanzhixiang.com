@@ -121,9 +121,7 @@ export function MainFeed() {
   const [cursor, setCursor] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const [activeTab, setActiveTab] = useState<"For you" | "Following">(
-    "For you",
-  );
+  const [activeTab, setActiveTab] = useState<"Trending" | "Recent">("Trending");
   const [mode, setMode] = useState<"prompt" | "manual">("prompt");
   const [copied, setCopied] = useState(false);
   const [showHero, setShowHero] = useState(true);
@@ -145,7 +143,7 @@ export function MainFeed() {
     setLoading(true);
     try {
       const params = new URLSearchParams({
-        sort: "new",
+        sort: activeTab === "Trending" ? "rising" : "new",
         limit: String(PAGE_SIZE),
       });
       if (cursor) params.set("cursor", cursor);
@@ -175,7 +173,15 @@ export function MainFeed() {
     } finally {
       setLoading(false);
     }
-  }, [cursor, hasMore, loading]);
+  }, [cursor, hasMore, loading, activeTab]);
+
+  const handleTabChange = (tab: "Trending" | "Recent") => {
+    if (activeTab === tab) return;
+    setActiveTab(tab);
+    setItems([]);
+    setCursor(null);
+    setHasMore(true);
+  };
 
   useEffect(() => {
     loadMore();
@@ -314,74 +320,31 @@ export function MainFeed() {
       <div className="sticky top-0 z-20 w-full bg-black/65 backdrop-blur-md">
         <div className="flex w-full border-b border-white/20">
           <button
-            onClick={() => setActiveTab("For you")}
+            onClick={() => handleTabChange("Trending")}
             className="relative flex h-[53px] flex-1 items-center justify-center transition-colors hover:bg-white/10"
           >
             <span
-              className={`text-[15px] font-bold ${activeTab === "For you" ? "text-white" : "text-[#71767b]"}`}
+              className={`text-[15px] font-bold ${activeTab === "Trending" ? "text-white" : "text-[#71767b]"}`}
             >
-              For you
+              Trending
             </span>
-            {activeTab === "For you" && (
-              <div className="absolute bottom-0 h-[4px] w-[56px] rounded-full bg-[#1d9bf0]" />
+            {activeTab === "Trending" && (
+              <div className="absolute bottom-0 h-[4px] w-[60px] rounded-full bg-[#1d9bf0]" />
             )}
           </button>
           <button
-            onClick={() => setActiveTab("Following")}
+            onClick={() => handleTabChange("Recent")}
             className="relative flex h-[53px] flex-1 items-center justify-center transition-colors hover:bg-white/10"
           >
             <span
-              className={`text-[15px] font-bold ${activeTab === "Following" ? "text-white" : "text-[#71767b]"}`}
+              className={`text-[15px] font-bold ${activeTab === "Recent" ? "text-white" : "text-[#71767b]"}`}
             >
-              Following
+              Recent
             </span>
-            {activeTab === "Following" && (
-              <div className="absolute bottom-0 h-[4px] w-[70px] rounded-full bg-[#1d9bf0]" />
+            {activeTab === "Recent" && (
+              <div className="absolute bottom-0 h-[4px] w-[48px] rounded-full bg-[#1d9bf0]" />
             )}
           </button>
-        </div>
-      </div>
-
-      {/* Post Composer */}
-      <div className="flex border-b border-white/20 px-4 py-3">
-        <div className="mr-3 h-10 w-10 shrink-0">
-          <img
-            src="https://media.theresanaiforthat.com/featured-on-taaft.png?width=100"
-            alt="User"
-            className="h-full w-full rounded-full object-cover bg-neutral-800"
-          />
-        </div>
-        <div className="flex flex-1 flex-col pt-2">
-          <textarea
-            placeholder="What is happening?!"
-            className="mb-3 w-full resize-none bg-transparent text-xl text-white placeholder-[#71767b] outline-none"
-            rows={2}
-          />
-          <div className="flex items-center justify-between border-t border-white/20 pt-3">
-            <div className="flex items-center gap-1 text-[#1d9bf0]">
-              <div className="rounded-full p-2 transition-colors hover:bg-[#1d9bf0]/10 cursor-pointer">
-                <MediaIcon className="h-5 w-5" />
-              </div>
-              <div className="rounded-full p-2 transition-colors hover:bg-[#1d9bf0]/10 cursor-pointer">
-                <GifIcon className="h-5 w-5" />
-              </div>
-              <div className="rounded-full p-2 transition-colors hover:bg-[#1d9bf0]/10 cursor-pointer hidden sm:block">
-                <PollIcon className="h-5 w-5" />
-              </div>
-              <div className="rounded-full p-2 transition-colors hover:bg-[#1d9bf0]/10 cursor-pointer">
-                <EmojiIcon className="h-5 w-5" />
-              </div>
-              <div className="rounded-full p-2 transition-colors hover:bg-[#1d9bf0]/10 cursor-pointer hidden sm:block">
-                <ScheduleIcon className="h-5 w-5" />
-              </div>
-              <div className="rounded-full p-2 transition-colors hover:bg-[#1d9bf0]/10 cursor-pointer opacity-50">
-                <LocationIcon className="h-5 w-5" />
-              </div>
-            </div>
-            <button className="rounded-full bg-[#1d9bf0] px-4 py-1.5 text-[15px] font-bold text-white transition-opacity hover:bg-[#1a8cd8] disabled:opacity-50">
-              Post
-            </button>
-          </div>
         </div>
       </div>
 
@@ -390,6 +353,11 @@ export function MainFeed() {
         {items.map((post) => (
           <Tweet key={post.id} post={post} />
         ))}
+        {loading && items.length === 0 && (
+          <div className="flex h-32 items-center justify-center">
+            <div className="h-7 w-7 animate-spin rounded-full border-[3px] border-[#1d9bf0]/30 border-t-[#1d9bf0]" />
+          </div>
+        )}
         {/* Helper for infinite scroll */}
         <div ref={sentinelRef} className="h-20 w-full" />
       </div>
