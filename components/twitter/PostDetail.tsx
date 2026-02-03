@@ -93,7 +93,13 @@ export function PostDetail({
       <div className="px-4 pt-3">
         {/* Author Info */}
         <div className="flex items-center justify-between">
-          <div className="flex gap-3">
+          <div
+            className="flex gap-3 cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation();
+              router.push(`/u/${post.handle.replace(/^@/, "")}`);
+            }}
+          >
             {post.avatarUrl ? (
               <img
                 src={post.avatarUrl}
