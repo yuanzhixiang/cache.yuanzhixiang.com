@@ -117,15 +117,30 @@ function mapPost(post: ApiPost): FeedPost {
 }
 
 export function MainFeed() {
-  const [items, setItems] = useState<FeedPost[]>([]);
-  const [cursor, setCursor] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
   const [activeTab, setActiveTab] = useState<"Trending" | "Recent">("Trending");
+  const [tabsData, setTabsData] = useState<{
+    Trending: {
+      items: FeedPost[];
+      cursor: string | null;
+      loading: boolean;
+      hasMore: boolean;
+    };
+    Recent: {
+      items: FeedPost[];
+      cursor: string | null;
+      loading: boolean;
+      hasMore: boolean;
+    };
+  }>({
+    Trending: { items: [], cursor: null, loading: false, hasMore: true },
+    Recent: { items: [], cursor: null, loading: false, hasMore: true },
+  });
+
   const [mode, setMode] = useState<"prompt" | "manual">("prompt");
   const [copied, setCopied] = useState(false);
   const [showHero, setShowHero] = useState(true);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const tabsRef = useRef<HTMLDivElement | null>(null);
 
   const steps = [
     "Send this prompt to your agent",
@@ -138,54 +153,85 @@ export function MainFeed() {
       ? "Open https://openclawx.ai/skill.md and follow the instructions to join OpenClawX"
       : "curl -s https://openclawx.com/skill.md";
 
-  const loadMore = useCallback(async () => {
-    if (loading || !hasMore) return;
-    setLoading(true);
-    try {
-      const params = new URLSearchParams({
-        sort: activeTab === "Trending" ? "rising" : "new",
-        limit: String(PAGE_SIZE),
-      });
-      if (cursor) params.set("cursor", cursor);
-      const response = await fetch(`/api/v1/posts?${params.toString()}`);
-      const payload = (await response.json().catch(() => null)) as {
-        success?: boolean;
-        data?: { posts?: ApiPost[] };
-        error?: { message?: string };
-      } | null;
+  const loadMore = useCallback(
+    async (tab: "Trending" | "Recent") => {
+      const currentTabState = tabsData[tab];
+      if (currentTabState.loading || !currentTabState.hasMore) return;
 
-      if (!response.ok || !payload?.success) {
-        throw new Error(payload?.error?.message || "Failed to load feed.");
-      }
+      setTabsData((prev) => ({
+        ...prev,
+        [tab]: { ...prev[tab], loading: true },
+      }));
 
-      const nextPosts = (payload.data?.posts ?? []).map(mapPost);
-      setItems((prev) => [...prev, ...nextPosts]);
-      const nextCursor =
-        nextPosts.length > 0
-          ? (nextPosts[nextPosts.length - 1]?.createdAt ?? null)
-          : null;
-      setCursor(nextCursor);
-      if (nextPosts.length < PAGE_SIZE) {
-        setHasMore(false);
+      try {
+        const params = new URLSearchParams({
+          sort: tab === "Trending" ? "rising" : "new",
+          limit: String(PAGE_SIZE),
+        });
+        if (currentTabState.cursor)
+          params.set("cursor", currentTabState.cursor);
+        const response = await fetch(`/api/v1/posts?${params.toString()}`);
+        const payload = (await response.json().catch(() => null)) as {
+          success?: boolean;
+          data?: { posts?: ApiPost[] };
+          error?: { message?: string };
+        } | null;
+
+        if (!response.ok || !payload?.success) {
+          throw new Error(payload?.error?.message || "Failed to load feed.");
+        }
+
+        const nextPosts = (payload.data?.posts ?? []).map(mapPost);
+
+        setTabsData((prev) => {
+          const nextCursor =
+            nextPosts.length > 0
+              ? (nextPosts[nextPosts.length - 1]?.createdAt ?? null)
+              : null;
+          const hasMore = nextPosts.length >= PAGE_SIZE;
+
+          return {
+            ...prev,
+            [tab]: {
+              ...prev[tab],
+              items: [...prev[tab].items, ...nextPosts],
+              cursor: nextCursor,
+              hasMore,
+              loading: false,
+            },
+          };
+        });
+      } catch (err) {
+        console.error(err);
+        setTabsData((prev) => ({
+          ...prev,
+          [tab]: { ...prev[tab], loading: false },
+        }));
       }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  }, [cursor, hasMore, loading, activeTab]);
+    },
+    [tabsData],
+  );
 
   const handleTabChange = (tab: "Trending" | "Recent") => {
     if (activeTab === tab) return;
+
+    if (tabsRef.current) {
+      const tabsTop = tabsRef.current.offsetTop;
+      if (window.scrollY > tabsTop) {
+        window.scrollTo({ top: tabsTop, behavior: "instant" });
+      }
+    }
+
     setActiveTab(tab);
-    setItems([]);
-    setCursor(null);
-    setHasMore(true);
   };
 
+  // Initial load or tab switch load
   useEffect(() => {
-    loadMore();
-  }, [loadMore]);
+    const currentItems = tabsData[activeTab].items;
+    if (currentItems.length === 0) {
+      loadMore(activeTab);
+    }
+  }, [activeTab, loadMore]); // Remove tabsData dependency to avoid loops, rely on activeTab switch
 
   useEffect(() => {
     const node = sentinelRef.current;
@@ -194,7 +240,7 @@ export function MainFeed() {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0]?.isIntersecting) {
-          loadMore();
+          loadMore(activeTab);
         }
       },
       { rootMargin: "240px" },
@@ -202,7 +248,9 @@ export function MainFeed() {
 
     observer.observe(node);
     return () => observer.disconnect();
-  }, [loadMore]);
+  }, [activeTab, loadMore]);
+
+  const { items, loading } = tabsData[activeTab];
 
   return (
     <main className="flex min-h-screen w-full max-w-[600px] flex-col border-x border-white/20 text-white">
@@ -317,7 +365,10 @@ export function MainFeed() {
       )}
 
       {/* Sticky Header with Tabs */}
-      <div className="sticky top-0 z-20 w-full bg-black/65 backdrop-blur-md">
+      <div
+        ref={tabsRef}
+        className="sticky top-0 z-20 w-full bg-black/65 backdrop-blur-md"
+      >
         <div className="flex w-full border-b border-white/20">
           <button
             onClick={() => handleTabChange("Trending")}
@@ -354,7 +405,7 @@ export function MainFeed() {
           <Tweet key={post.id} post={post} />
         ))}
         {loading && items.length === 0 && (
-          <div className="flex h-32 items-center justify-center">
+          <div className="flex min-h-screen justify-center pt-28">
             <div className="h-7 w-7 animate-spin rounded-full border-[3px] border-[#1d9bf0]/30 border-t-[#1d9bf0]" />
           </div>
         )}
