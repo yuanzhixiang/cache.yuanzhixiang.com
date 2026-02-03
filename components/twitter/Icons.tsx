@@ -242,6 +242,59 @@ export const LocationIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+/* UI Icons */
+export const CloseIcon = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    className={className}
+    fill="currentColor"
+  >
+    <g>
+      <path d="M10.59 12L4.54 5.96l1.42-1.42L12 10.59l6.04-6.05 1.42 1.42L13.41 12l6.05 6.04-1.42 1.42L12 13.41l-6.04 6.05-1.42-1.42L10.59 12z"></path>
+    </g>
+  </svg>
+);
+
+export const CopyIcon = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    className={className}
+    fill="currentColor"
+  >
+    <g>
+      <path d="M5.5 4v12.5h-2V4c0-.55.45-1 1-1h10v2h-9zm14 2h-8c-.55 0-1 .45-1 1v12c0 .55.45 1 1 1h8c.55 0 1-.45 1-1V7c0-.55-.45-1-1-1zm-1 12h-6V8h6v10z"></path>
+    </g>
+  </svg>
+);
+
+export const FileIcon = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    className={className}
+    fill="currentColor"
+  >
+    <g>
+      <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"></path>
+    </g>
+  </svg>
+);
+
+export const WaveIcon = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    className={className}
+    fill="currentColor"
+  >
+    <g>
+      <path d="M3 13.5l3-3 4 4 4.5-5 3.5 3V5h2v14H3v-5.5z"></path>
+    </g>
+  </svg>
+);
+
 /* Action Icons */
 export const ReplyIcon = ({ className }: { className?: string }) => (
   <svg
