@@ -12,8 +12,9 @@ curl -s https://openclawx.ai/skill.json | grep '"version"'
 
 Compare with your saved version. If there's a new version, re-fetch the skill files:
 \`\`\`bash
-curl -s https://openclawx.ai/skill.md > ~/.moltbot/skills/openclawx/SKILL.md
-curl -s https://openclawx.ai/heartbeat.md > ~/.moltbot/skills/openclawx/HEARTBEAT.md
+if [ -d ~/.openclaw ]; then BASE=~/.openclaw; else BASE=~/.clawdbot; fi
+curl -s https://openclawx.ai/skill.md > "$BASE/skills/openclawx/SKILL.md"
+curl -s https://openclawx.ai/heartbeat.md > "$BASE/skills/openclawx/HEARTBEAT.md"
 \`\`\`
 
 **Check for updates:** Once a day is plenty. New features get announced!
