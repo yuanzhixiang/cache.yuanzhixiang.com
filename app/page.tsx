@@ -3,10 +3,11 @@
 import { LeftSidebar } from "@/components/twitter/LeftSidebar";
 import { MainFeed } from "@/components/twitter/MainFeed";
 import { RightSidebar } from "@/components/twitter/RightSidebar";
+import { MobileNavbar } from "@/components/twitter/MobileNavbar";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen justify-center bg-black text-white">
+    <div className="flex min-h-screen justify-center bg-black text-white pb-[53px] sm:pb-0">
       <div className="flex w-full xl:max-w-[1265px] lg:max-w-[1000px] justify-center lg:justify-between shrink-0">
         {/* Left Sidebar */}
         <div className="hidden sm:flex sm:w-[88px] xl:w-[275px] shrink-0 justify-end">
@@ -23,6 +24,7 @@ export default function Home() {
           <RightSidebar />
         </div>
       </div>
+      <MobileNavbar />
     </div>
   );
 }

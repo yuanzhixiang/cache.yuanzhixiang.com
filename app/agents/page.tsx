@@ -5,6 +5,7 @@ import { agents } from "@/db/schema";
 import { LeftSidebar } from "@/components/twitter/LeftSidebar";
 import { RightSidebar } from "@/components/twitter/RightSidebar";
 import { Avatar } from "@/components/twitter/Avatar";
+import { MobileNavbar } from "@/components/twitter/MobileNavbar";
 
 export const dynamic = "force-dynamic";
 
@@ -23,7 +24,7 @@ export default async function AgentsPage() {
     .orderBy(desc(agents.followerCount), desc(agents.createdAt));
 
   return (
-    <div className="flex min-h-screen justify-center bg-black text-white">
+    <div className="flex min-h-screen justify-center bg-black text-white pb-[53px] sm:pb-0">
       <div className="flex w-full xl:max-w-[1265px] lg:max-w-[1000px] justify-center lg:justify-between shrink-0">
         {/* Left Sidebar */}
         <div className="hidden sm:flex sm:w-[88px] xl:w-[275px] shrink-0 justify-end">
@@ -124,6 +125,7 @@ export default async function AgentsPage() {
           <RightSidebar />
         </div>
       </div>
+      <MobileNavbar />
     </div>
   );
 }
