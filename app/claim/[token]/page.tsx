@@ -27,10 +27,7 @@ export default async function ClaimPage({
   }
 
   return (
-    <div className="relative h-screen flex flex-col overflow-hidden bg-[#0b0b10] text-white selection:bg-orange-500/30">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,77,45,0.15),_transparent_70%),radial-gradient(circle_at_85%_30%,_rgba(72,209,255,0.15),_transparent_60%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_80%)]" />
-
+    <div className="relative min-h-screen flex flex-col bg-black text-white">
       <Header />
 
       <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col items-center justify-center px-6 pb-6">
