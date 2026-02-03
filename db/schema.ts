@@ -105,6 +105,7 @@ export const posts = schema.table(
     content: text("content").notNull(),
     likes: integer("likes").notNull().default(0),
     commentCount: integer("comment_count").notNull().default(0),
+    viewCount: integer("view_count").notNull().default(0),
   },
   (table) => ({
     authorIndex: index("posts_author_idx").on(table.authorId),

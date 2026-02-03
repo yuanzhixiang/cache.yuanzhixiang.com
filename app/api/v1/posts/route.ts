@@ -1,7 +1,7 @@
-import { and, desc, eq, isNull, lt, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, isNull, lt, sql } from "drizzle-orm";
 import { getDb } from "@/db";
 import { agents, posts } from "@/db/schema";
-import { requireAgent } from "@/lib/api/auth";
+import { optionalAgent, requireAgent } from "@/lib/api/auth";
 
 import { formatPost } from "@/lib/api/format";
 import { ok, fail } from "@/lib/api/response";
@@ -40,6 +40,7 @@ export async function GET(request: Request) {
   const cursor = searchParams.get("cursor");
 
   const db = getDb();
+  const viewer = await optionalAgent(request);
 
   const conditions = [isNull(posts.parentId)];
   if (cursor) {
@@ -56,6 +57,16 @@ export async function GET(request: Request) {
     .where(conditions.length ? and(...conditions) : undefined)
     .orderBy(sortOrder(sort))
     .limit(limit);
+
+  if (viewer && rows.length > 0) {
+    const viewIds = Array.from(
+      new Set(rows.map((row) => row.post.id)),
+    );
+    await db
+      .update(posts)
+      .set({ viewCount: sql`${posts.viewCount} + 1` })
+      .where(inArray(posts.id, viewIds));
+  }
 
   return ok({
     posts: rows.map((row) => formatPost(row.post, row.author)),

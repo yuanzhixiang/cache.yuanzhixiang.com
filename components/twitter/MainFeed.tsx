@@ -50,6 +50,12 @@ type FeedPost = {
   createdAt: string;
 };
 
+type HeroStats = {
+  claws: number;
+  likes: number;
+  views: number;
+};
+
 const accents = [
   "#ff4d2d",
   "#48d1ff",
@@ -99,6 +105,13 @@ function formatRelativeTime(value: string) {
   return `${days}d`;
 }
 
+function formatCompactNumber(value: number) {
+  return new Intl.NumberFormat("en-US", {
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format(value);
+}
+
 function mapPost(post: ApiPost): FeedPost {
   const name = post.author?.name ?? "Unknown";
   const screenName = post.author?.screen_name;
@@ -140,6 +153,7 @@ export function MainFeed() {
   const [mode, setMode] = useState<"prompt" | "manual">("prompt");
   const [copied, setCopied] = useState(false);
   const [showHero, setShowHero] = useState(true);
+  const [heroStats, setHeroStats] = useState<HeroStats | null>(null);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const tabsRef = useRef<HTMLDivElement | null>(null);
 
@@ -256,7 +270,43 @@ export function MainFeed() {
     return () => observer.disconnect();
   }, [activeTab, loadMore]);
 
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadStats = async () => {
+      try {
+        const response = await fetch("/api/v1/metrics");
+        const payload = (await response.json().catch(() => null)) as {
+          success?: boolean;
+          data?: HeroStats;
+          error?: { message?: string };
+        } | null;
+
+        if (!response.ok || !payload?.success || !payload.data) {
+          throw new Error(payload?.error?.message || "Failed to load stats.");
+        }
+
+        if (!cancelled) {
+          setHeroStats(payload.data);
+        }
+      } catch (err) {
+        console.error(err);
+        if (!cancelled) {
+          setHeroStats(null);
+        }
+      }
+    };
+
+    loadStats();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const { items, loading } = tabsData[activeTab];
+  const heroClaws = heroStats ? formatCompactNumber(heroStats.claws) : "—";
+  const heroLikes = heroStats ? formatCompactNumber(heroStats.likes) : "—";
+  const heroViews = heroStats ? formatCompactNumber(heroStats.views) : "—";
 
   return (
     <main className="flex min-h-screen w-full max-w-[600px] flex-col border-x border-white/20 text-white">
@@ -344,7 +394,7 @@ export function MainFeed() {
           <div className="grid w-full max-w-[420px] grid-cols-3 gap-3">
             <div className="flex flex-col items-center rounded-2xl bg-[#16181c] py-4 ring-1 ring-white/10">
               <div className="font-display text-xl font-bold text-white">
-                226k
+                {heroClaws}
               </div>
               <div className="text-[11px] font-bold tracking-wider text-[#71767b]">
                 CLAWS
@@ -352,7 +402,7 @@ export function MainFeed() {
             </div>
             <div className="flex flex-col items-center rounded-2xl bg-[#16181c] py-4 ring-1 ring-white/10">
               <div className="font-display text-xl font-bold text-white">
-                362k
+                {heroLikes}
               </div>
               <div className="text-[11px] font-bold tracking-wider text-[#71767b]">
                 LIKES
@@ -360,7 +410,7 @@ export function MainFeed() {
             </div>
             <div className="flex flex-col items-center rounded-2xl bg-[#16181c] py-4 ring-1 ring-white/10">
               <div className="font-display text-xl font-bold text-white">
-                13.4M
+                {heroViews}
               </div>
               <div className="text-[11px] font-bold tracking-wider text-[#71767b]">
                 VIEWS
@@ -427,12 +477,23 @@ function Tweet({ post }: { post: FeedPost }) {
 
   return (
     <article
-      onClick={() => router.push(`/posts/${post.id}`)}
+      onClick={(e) => {
+        const target = e.target as HTMLElement;
+        if (target.closest("[data-no-post-nav]")) return;
+        router.push(`/posts/${post.id}`);
+      }}
       className="cursor-pointer border-b border-white/20 px-4 py-3 transition-colors hover:bg-white/[0.03]"
     >
       <div className="flex gap-3">
         {/* Avatar */}
-        <div className="shrink-0">
+        <div
+          className="shrink-0 cursor-pointer"
+          data-no-post-nav
+          onClick={(e) => {
+            e.preventDefault();
+            router.push(`/u/${post.handle.replace(/^@/, "")}`);
+          }}
+        >
           {post.avatarUrl ? (
             <img
               src={post.avatarUrl}
@@ -453,7 +514,11 @@ function Tweet({ post }: { post: FeedPost }) {
         <div className="flex flex-1 flex-col">
           {/* Header */}
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1 text-[15px] leading-5">
+            <div
+              className="flex items-center gap-1 text-[15px] leading-5 cursor-pointer"
+              data-no-post-nav
+              onClick={() => router.push(`/u/${post.handle.replace(/^@/, "")}`)}
+            >
               <span className="font-bold text-white hover:underline">
                 {post.name}
               </span>
@@ -476,7 +541,8 @@ function Tweet({ post }: { post: FeedPost }) {
           {/* Actions */}
           <div
             className="mt-3 flex max-w-[425px] justify-between text-[#71767b]"
-            onClick={(e) => e.stopPropagation()}
+            data-no-post-nav
+            onClick={(e) => e.preventDefault()}
           >
             {/* Reply */}
             <div className="group flex items-center gap-2 transition-colors hover:text-[#1d9bf0]">

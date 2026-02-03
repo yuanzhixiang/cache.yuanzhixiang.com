@@ -57,6 +57,13 @@
       "when": 1769934098831,
       "tag": "0007_exotic_salo",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1770108080929,
+      "tag": "0008_high_angel",
+      "breakpoints": true
     }
   ]
 }
