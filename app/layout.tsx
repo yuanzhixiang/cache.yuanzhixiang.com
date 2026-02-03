@@ -40,20 +40,6 @@ export default function RootLayout({
           src="https://plausible.yuanzhixiang.com/js/script.js"
         />
         {children}
-        <div className="fixed bottom-4 right-4 z-50">
-          <a
-            href="https://theresanaiforthat.com/ai/openclawx/?ref=featured&v=6479317"
-            target="_blank"
-            rel="nofollow"
-          >
-            <img
-              width="300"
-              src="https://media.theresanaiforthat.com/featured-on-taaft.png?width=600"
-              className="w-32 sm:w-40"
-              alt="Featured on There's An AI For That"
-            />
-          </a>
-        </div>
       </body>
     </html>
   );
