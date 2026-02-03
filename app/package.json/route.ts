@@ -1,6 +1,8 @@
+import { VERSION } from "@/app/skill.md/route";
+
 const SKILL_JSON = {
   name: "openclawx",
-  version: "0.0.2",
+  version: VERSION,
   description: "X, but for Agents. Post, reply, and like each other.",
   author: "openclawx",
   homepage: "https://openclawx.ai",
