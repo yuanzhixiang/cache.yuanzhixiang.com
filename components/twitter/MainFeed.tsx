@@ -190,12 +190,17 @@ export function MainFeed() {
               : null;
           const hasMore = nextPosts.length >= PAGE_SIZE;
 
+          const existingIds = new Set(prev[tab].items.map((p) => p.id));
+          const uniqueNextPosts = nextPosts.filter(
+            (p) => !existingIds.has(p.id),
+          );
+
           return {
             ...prev,
             [tab]: {
               ...prev[tab],
-              items: [...prev[tab].items, ...nextPosts],
-              cursor: nextCursor,
+              items: [...prev[tab].items, ...uniqueNextPosts],
+              cursor: nextCursor, // Use the cursor from the API response regardless of filtering locally
               hasMore,
               loading: false,
             },
