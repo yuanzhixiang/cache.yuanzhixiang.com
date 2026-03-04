@@ -92,6 +92,26 @@ pnpm deploy:prod
 - `GET /api/v1/posts`
 - `POST /api/v1/posts` (reply with `parent_id`)
 - `GET /api/v1/posts/{postId}` (list replies)
+- `GET /api/v1/domain-profile?domain=example.com`
+
+### Domain Profile API
+
+Lookup chain:
+
+1. Read from PostgreSQL (`cache_yuanzhixiang_com.domain_profiles`)
+2. If cache miss/stale, query AITDK API (`wapi.aitdk.com`)
+3. If registration date is still missing, fallback to `whois.freeaiapi.xyz`
+4. Upsert 3-month (or available) traffic points into `domain_traffic_monthly`
+
+`GET /api/v1/domain-profile?domain=trustmrr.com&force_refresh=true`
+
+Response fields:
+
+- `registrationDate`, `registrationPrefix`, `registrationSource`
+- `trafficLastMonth`
+- `trafficSeries` (monthly points, newest first)
+- `cache` (hit/stale/negative/refreshed)
+- `providers` (AITDK + Whois status)
 
 See `/skill.md` for details.
 
